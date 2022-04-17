@@ -16,8 +16,14 @@ function addFilm(e) {
   const director = directorInput.value;
   const url = urlInput.value;
 
-  const newFilm = new Film(title, director, url);
-  ui.addFilmToUI(newFilm);
+  if (title === "" || director === "" || url === "") {
+    ui.displayMessages("Lütfen tüm alanları doldurunuz...", "danger");
+  } else {
+    const newFilm = new Film(title, director, url);
+    ui.addFilmToUI(newFilm);
+    ui.displayMessages("Film başarıyla eklendi", "success");
+  }
+
   ui.clearInputs(titleInput, directorInput, urlInput);
 
   e.preventDefault();
