@@ -1,0 +1,139 @@
+//1-ilk olarak film constructor yazılacak film.js içinde, her filmin bi title ı director u ve fotoğrafı için url si var, bir film objesi oluşturulmalı
+//ve parametre olarak title,director,url verilmeli.
+
+// function Film(title,director,url){
+//  this.title=title;
+//  this.director=director;
+//  this.url=url;
+//   }
+//}
+
+//2-bizim ana js dosyamız project.js dosyası, yukarda oluşturduğumuz constructor ı project.js de kullanıcaz. Ancak ilk olarak uı kısmındaki elemanları seçmemiz gerekiyor
+// bunun için project.js de seçeceğimiz bir form var başlık bilgisinin girildiği bi title inputu, director ve url inputu var bunları seçmemiz lazım
+// const form=document.getElementById("film-form")
+// const titleElement=document.querySelector("#title")
+// const directorElement=document.querySelector("#director")
+// const urlElement=document.querySelector("#url")
+// elemanları bu şekilde seçtik
+
+//3-biz bu filmleri ui a ekleyeceğimiz için bi ui constructor ına ihtiyacımız var arayüz işlemlerini ui objesinin prototype ında yapıcaz
+// ui.js de function UI(){} yazdık
+
+//4- daha sonra ana sayfada (project.js) ui objesini başlatmamız gerekiyor const ui=new UI()
+
+//5-tüm eventleri yüklemek için bir fonksiyon yazıcaz eventListeners olabilir
+// eventListeners();
+// function eventListeners(){
+//    form.addEventListener("submit",addFilm) submit işlemi form üzerinden yapılacağı için eventi forma ekledik
+// }
+
+//6- seçtiğimiz elementlerin değerlerini almamız gerekiyor
+// function addFilm(e){
+//  const title=titleElement.value;
+//  const director=directorElement.value;
+//  const url=urlElement.value;
+//
+// (sayfada bulunan inputlardan herhangi biri bile boş kaldığında hata yazdırmak istiyoruz bunu if kontrol yapısıyla yapıcaz)
+// if(title===" " || director===" " || url===" "){
+//  //hata
+//}
+// else{
+//   const Film=new Film(title,director,url); // film objesi oluşturduk
+//
+//      ui.addFilmToUI(newFilm); //arayüze film ekleyecek olan fonksiyon, bu fonksiyonu ui.js de tanımlamamız gerekiyor
+//  }
+//
+//  e.preventDefault();
+//  }
+
+//7- ui.js de ui objesinin prototype ına yukarıda oluşturduğumuz addFilmToUI fonksiyonunu göndericez ve parametre olarak newFilm vericez.
+// UI.prototype.addFilmToUI=function(newFilm){filmleri nereye ekleyeceksen onu dom yöntemleriyle göstermen gerek filmler tbody e eklenecek o zaman}
+// const filmList = document.getElementById("films");
+// filmleri göstereceğin table ı innerHTML olarak eklemen lazım ve template literals şeklinde eklemen lazım.
+// filmList.innerHTML += ` eğer += yapmazsan her eklenen üzerine eklenmeyecek tek tek gösterilecek
+//  <tr>
+//    <td><img src="${newFilm.url}" class="img-fluid img-thumbnail"></td>
+//        <td>${newFilm.title}</td> => inputa girilen title ı bu şekilde gösterirsin
+//        <td>${newFilm.director}</td>
+//    <td><a href="#" id = "delete-film" class = "btn btn-danger">Filmi Sil</a></td>
+//   </tr>`;
+
+//8-tbody e filmlerimizi ekleyeceğiz yani innerHtml ine filmList=innerHTML +=` `
+
+//                               BİLGİLER GİRİLDİKTEN SONRA INPUTLARIN TEMİZLENMESİ
+//UI tarafında bi fonksiyon tanımla UI.prototype.clearInputs=function(){}
+//parametre olarak element1 element2 element3 verebilirsin
+// element1 in değeri boş yazdır yani el1.value=""; element2 ve element3 ü de aynı şekilde yaz.
+// bu elementler refresh atmak istediğimiz yerlere karşılık geliyor yani eleman ekleye basıldıktan sonra inputlar resetlensin istiyoruz o yüzden
+//inputları parametre olarak vericez.
+
+//                                 BOOTSTRAP UYARI MESAJLARI
+// hata mesajları yazdırmak için tarayıcıya bootstrap 4 alerts yazıyosun giriyosun
+// hatayı projects te if else içine yazdıracaksın.
+// önce bi fonksiyon oluştur hata için displayMessages olsun ve bunu ui'ın prototype ına ekle
+// UI.prototype.displayMessages=function(message,type) hata mesajı iki parametre alır biri mesajı yazdırır diğeri türünü belirtir success veya danger gibi
+// sonra div oluşturman gerekiyor hatayı nerede göstermek istiyoruz? ilk card body nin altında, ui kısmında bu card body i seçmen gerek
+// oluşturduğun displayMessages fonksiyonunun içinde card body i seç const cardBody=document.querySelectorAll(".card-body")[0]; iki tane card Body olduğu için ilkini seçtik
+// sonra bi div oluştur const div=createElement("div") şeklinde
+// bu div'e bi className vermen lazım div.className=`alert alert-${type}`
+// bu div'e mesaj eklemek için textContent eklemen lazım div.textContent=message;
+// bu cardBody i child eleman olarak eklemen gerekiyor: cardBody.appendChild(div)
+//hata mesajının belli bir süre görünmesini istiyorsan örneğin 1.5 saniye bunun için setTimeOut fonksiyonunu kullan
+// setTimeOut fonksiyonu iki parametre tutar biri zamanı diğeri de fonksiyon tutar
+// setTimeOut(function(){div.remove()},1500) şeklinde. Burdaki div.remove divin sürekli ekranda kalmaması için 1.5 sn sonra divi kaldır demek
+// projects.js de if in içine ui.displayMessages("tüm alanları doldurunuz","danger") dersen hata mesajı verir
+// aynı şekilde else yapısının içine de ui.displayMessages("başarıyla eklendi","success") dersen başarı mesajı verir
+
+//                                 FİLMLERİ LOCAL STORAGE'A EKLEME
+// önce storage.js de storage adında bi constructor oluştur ve project.js de bir obje üret const storage=new Storage(); şeklinde
+//bizim filmlerimiz projects.js de if else yapısında else bloğu içinde ekleniyordu. Hata mesajı verdirdiğimiz satırın üstünde storage' a ekleme işlemini yapabiliriz
+//storage.addFilmToStorage(newFilm) bu fonksiyon storage'a film eklemek için kullanılacak.
+//sonra storage.js e git ve addFilmToStorage fonksiyonunu storage.prototype'ına tanımla Storage.prototype.addFilmToStorage=function(newFilm){}
+// biz filmimizi bir tane array'e yazıcaz ve array'i de localStorage'a ekleyeceğiz.Ancak öncesinde kontrol etmemiz gereken durum localStorage da array var mı yok mu ?
+// let films; adında bir değişken oluştur
+//oluşturduğun bu değişken adı localStorage'da var mı kontrol et eğer yoksa null bir obje döndür
+//if(localStorage.getItem("films")===null) eğer films adında bir key yoksa if bloğu içinde boş bir array oluştur
+//films=[];
+//ancak key varsa olan değeri almamız gerekiyor, localStorage sadece string değerler kabul eder o yüzden aldığımız değeri parse etmemiz lazım
+// films=JSON.parse(localStorage.getItem("films"))
+// localStorage'da yapılan işlemleri daha sonra başka yerlerde de kullanacağımız için bunu bir fonksiyon haline getiriyoruz.
+// Storage.prototype.getFilmsFromStorage=function(){ yukarıda yazılan kodları buraya yapıştırıp altına films i return et}
+//localStorage'dan bir array dönüyor ve bizim bu array'i addFilmToStorage da almamız gerekiyor. let films=this.getFilmsFromStorage();
+// arrayimize aldığımız new filmi ekleyeceğiz. films.push(newFilm)
+// array imizi localStorage a yazmamız lazım localStorage.setItem("films",JSON.stringify(films)) stringe çevirerek attık
+//                                  LOCAL STORAGE'A FİLMLERİ EKLEYEN KODLAR
+// function Storage() {}
+
+// Storage.prototype.addFilmToStorage = function (newFilm) {
+//   let films = this.getFilmsFromStorage();
+//   films.push(newFilm);
+//   localStorage.setItem("films", JSON.stringify(films));
+// };
+
+// Storage.prototype.getFilmsFromStorage = function () {
+//   let films;
+//   if (localStorage.getItem("films") === null) {
+//     films = [];
+//   } else {
+//     films = JSON.parse(localStorage.getItem("films"));
+//   }
+//   return films;
+// };
+
+//                              SAYFA YÜKLENDİĞİNDE LOCAL STORAGE DAN FİLMLERİ ALMA
+// sayfa yüklendiğinde filmler gelsin istiyorsak bi dökümanımızda bi event tanımlamamız gerekiyor bu event DOMContentLoaded olacak ve yanına bi function tanımlayacağız parametre vermeyeceğiz
+// bu function dizi olarak localStorage daki filmleri bize getirecek, biz zaten bunu yapmıştık storage.js de getFilmFromStorage fonksiyonu ile
+// let films=storage.getFilmFromStorage() storage dan filmleri al ve films değişkenine yaz demek
+//bu getirilen array i ui ın içindeki bir fonksiyona göndericez bunun için DOMContentLoaded ın yanında yazdığımız fonksiyonun içine ui.loadAllFilms() adında bi fonksiyon çağır
+// çağırdığın bu fonksiyonu ui da tanımla. UI.prototype.loadAllFilms=function(films){}
+// film listemizin listeleneceği yer ui tarafında tbody nin içinde o yüzden tbody i seçmemiz lazım
+// const filmList=document.getElementById("films")
+//128. satırda yazdığımız fonksiyonun parametresi films, bu localStorage da duran array, bu array i forEach ile gezip her filmi almamız gerekiyor
+//films.forEach(function(film){
+//bizim aldığımız verilerin title ı director u ve url si var bunları filmListin innerHTML ine ekleyeceğiz template literal kullanıcaz yine yukardakinin aynısı
+//})
+//
+
+
+
+
