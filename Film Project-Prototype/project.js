@@ -6,6 +6,7 @@ const urlInput = document.querySelector("#url");
 eventListeners();
 
 const ui = new UI();
+const storage = new Storage();
 
 function eventListeners() {
   form.addEventListener("submit", addFilm);
@@ -21,6 +22,7 @@ function addFilm(e) {
   } else {
     const newFilm = new Film(title, director, url);
     ui.addFilmToUI(newFilm);
+    storage.addFilmToStorage(newFilm);
     ui.displayMessages("Film başarıyla eklendi", "success");
   }
 
