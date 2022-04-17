@@ -18,6 +18,7 @@ function addFilm(e) {
 
   const newFilm = new Film(title, director, url);
   ui.addFilmToUI(newFilm);
+  ui.clearInputs(titleInput, directorInput, urlInput);
 
   e.preventDefault();
 }
